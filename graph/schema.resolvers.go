@@ -16,9 +16,10 @@ func (r *mutationResolver) CreateArticle(ctx context.Context, input model.Create
 	article, err := r.ArticleClient.CreateArticle(
 		ctx,
 		&pb.ArticleInput{
-			Author:  input.Author,
-			Title:   input.Title,
-			Content: input.Content,
+			DisplayAppName: input.DisplayAppName,
+			IconSrc:        input.IconSrc,
+			CvCondition:    input.CvCondition,
+			BasePoint:      int64(input.BasePoint),
 		})
 	if err != nil {
 		return nil, err
@@ -34,9 +35,10 @@ func (r *mutationResolver) UpdateArticle(ctx context.Context, input model.Update
 		ctx,
 		int64(input.ID),
 		&pb.ArticleInput{
-			Author:  input.Author,
-			Title:   input.Title,
-			Content: input.Content,
+			DisplayAppName: input.DisplayAppName,
+			IconSrc:        input.IconSrc,
+			CvCondition:    input.CvCondition,
+			BasePoint:      int64(input.BasePoint),
 		})
 	if err != nil {
 		return nil, err
@@ -58,7 +60,7 @@ func (r *mutationResolver) DeleteArticle(ctx context.Context, input int) (int, e
 }
 
 func (r *queryResolver) Article(ctx context.Context, input int) (*model.Article, error) {
-	// 入力したIDの記事をgRPCサーバーからREAD
+	// 入力したIDの広告をgRPCサーバーからREAD
 	article, err := r.ArticleClient.ReadArticle(ctx, int64(input))
 	if err != nil {
 		return nil, err

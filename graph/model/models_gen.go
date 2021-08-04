@@ -3,21 +3,24 @@
 package model
 
 type Article struct {
-	ID      int    `json:"id"`
-	Author  string `json:"author"`
-	Title   string `json:"title"`
-	Content string `json:"content"`
+	ID             int    `json:"id"`
+	DisplayAppName string `json:"display_app_name"`
+	IconSrc        string `json:"icon_src"`
+	CvCondition    string `json:"cv_condition"`
+	BasePoint      int    `json:"base_point"`
 }
 
 type CreateInput struct {
-	Author  string `json:"author"`
-	Title   string `json:"title"`
-	Content string `json:"content"`
+	DisplayAppName string `json:"display_app_name"`
+	IconSrc        string `json:"icon_src"`
+	CvCondition    string `json:"cv_condition"`
+	BasePoint      int    `json:"base_point"`
 }
 
 type UpdateInput struct {
-	ID      int    `json:"id"`
-	Author  string `json:"author"`
-	Title   string `json:"title"`
-	Content string `json:"content"`
+	ID             int    `json:"id"`
+	DisplayAppName string `json:"display_app_name"`
+	IconSrc        string `json:"icon_src"`
+	CvCondition    string `json:"cv_condition"`
+	BasePoint      int    `json:"base_point"`
 }

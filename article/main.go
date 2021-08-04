@@ -1,3 +1,4 @@
+// gRPCサーバーの動作確認用のファイル
 package main
 
 import (
@@ -10,23 +11,23 @@ import (
 	"github.com/k88t76/GraphQL-gRPC-demo/article/pb"
 )
 
-// gRPCサーバーの動作確認用
 func main() {
 	// clientを生成
 	c, _ := client.NewClient("localhost:50051")
 	create(c)
-	read(c)
-	update(c)
-	delete(c)
-	list(c)
+	// read(c)
+	// update(c)
+	// delete(c)
+	// list(c)
 }
 
 func create(c *client.Client) {
-	// 記事をCREATE
+	// 広告をCREATE
 	input := &pb.ArticleInput{
-		Author:  "gopher",
-		Title:   "gRPC",
-		Content: "gRPC is so cool!",
+		DisplayAppName: "テストアプリ",
+		IconSrc:        "testSrc",
+		CvCondition:    "インストールで獲得",
+		BasePoint:      1000,
 	}
 	res, err := c.Service.CreateArticle(context.Background(), &pb.CreateArticleRequest{ArticleInput: input})
 	if err != nil {
@@ -36,7 +37,7 @@ func create(c *client.Client) {
 }
 
 func read(c *client.Client) {
-	// 記事をREAD
+	// 広告をREAD
 	var id int64 = 16
 	res, err := c.Service.ReadArticle(context.Background(), &pb.ReadArticleRequest{Id: id})
 	if err != nil {
@@ -46,12 +47,13 @@ func read(c *client.Client) {
 }
 
 func update(c *client.Client) {
-	// 記事をUPDATE
+	// 広告をUPDATE
 	var id int64 = 16
 	input := &pb.ArticleInput{
-		Author:  "GraphQL master",
-		Title:   "GraphQL",
-		Content: "GraphQL is very smart!",
+		DisplayAppName: "テストアプリ改",
+		IconSrc:        "newSrc",
+		CvCondition:    "Lv.100到達で獲得",
+		BasePoint:      2500,
 	}
 	res, err := c.Service.UpdateArticle(context.Background(), &pb.UpdateArticleRequest{Id: id, ArticleInput: input})
 	if err != nil {
@@ -61,7 +63,7 @@ func update(c *client.Client) {
 }
 
 func delete(c *client.Client) {
-	// 記事をDELETE
+	// 広告をDELETE
 	var id int64 = 13
 	res, err := c.Service.DeleteArticle(context.Background(), &pb.DeleteArticleRequest{Id: id})
 	if err != nil {
@@ -71,7 +73,7 @@ func delete(c *client.Client) {
 }
 
 func list(c *client.Client) {
-	// 記事を全取得
+	// 広告を全取得
 	stream, err := c.Service.ListArticle(context.Background(), &pb.ListArticleRequest{})
 	if err != nil {
 		log.Fatalf("Failed to ListArticle: %v\n", err)

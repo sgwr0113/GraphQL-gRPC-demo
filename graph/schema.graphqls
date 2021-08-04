@@ -1,24 +1,27 @@
-# articleサービスとやり取りする記事の型定義
+# articleサービスとやり取りする広告の型定義
 type Article {
     id: Int!
-    author: String!
-    title: String!
-    content: String!
+    display_app_name: String!
+    icon_src: String!
+    cv_condition: String!
+    base_point: Int!
 }
 
 # CREATEのためのinputを定義
 input CreateInput {
-    author: String!
-    title: String!
-    content: String!
+    display_app_name: String!
+    icon_src: String!
+    cv_condition: String!
+    base_point: Int!
 }
 
 # UPDATEのためのinputを定義
 input UpdateInput {
     id: Int!
-    author: String!
-    title: String!
-    content: String!
+    display_app_name: String!
+    icon_src: String!
+    cv_condition: String!
+    base_point: Int!
 }
 
 # mutationの定義(CREATE, UPDATE, DELETEを行う)

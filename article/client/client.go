@@ -39,10 +39,11 @@ func (c *Client) CreateArticle(ctx context.Context, input *pb.ArticleInput) (*mo
 		return nil, err
 	}
 	return &model.Article{
-		ID:      int(res.Article.Id),
-		Author:  res.Article.Author,
-		Title:   res.Article.Title,
-		Content: res.Article.Content,
+		ID:             int(res.Article.Id),
+		DisplayAppName: res.Article.DisplayAppName,
+		IconSrc:        res.Article.IconSrc,
+		CvCondition:    res.Article.CvCondition,
+		BasePoint:      int(res.Article.BasePoint),
 	}, nil
 }
 
@@ -52,10 +53,11 @@ func (c *Client) ReadArticle(ctx context.Context, id int64) (*model.Article, err
 		return nil, err
 	}
 	return &model.Article{
-		ID:      int(res.Article.Id),
-		Author:  res.Article.Author,
-		Title:   res.Article.Title,
-		Content: res.Article.Content,
+		ID:             int(res.Article.Id),
+		DisplayAppName: res.Article.DisplayAppName,
+		IconSrc:        res.Article.IconSrc,
+		CvCondition:    res.Article.CvCondition,
+		BasePoint:      int(res.Article.BasePoint),
 	}, nil
 }
 
@@ -65,10 +67,11 @@ func (c *Client) UpdateArticle(ctx context.Context, id int64, input *pb.ArticleI
 		return nil, err
 	}
 	return &model.Article{
-		ID:      int(res.Article.Id),
-		Author:  res.Article.Author,
-		Title:   res.Article.Title,
-		Content: res.Article.Content,
+		ID:             int(res.Article.Id),
+		DisplayAppName: res.Article.DisplayAppName,
+		IconSrc:        res.Article.IconSrc,
+		CvCondition:    res.Article.CvCondition,
+		BasePoint:      int(res.Article.BasePoint),
 	}, nil
 }
 
@@ -95,10 +98,11 @@ func (c *Client) ListArticle(ctx context.Context) ([]*model.Article, error) {
 			return nil, err
 		}
 		articles = append(articles, &model.Article{
-			ID:      int(r.Article.Id),
-			Author:  r.Article.Author,
-			Title:   r.Article.Title,
-			Content: r.Article.Content,
+			ID:             int(r.Article.Id),
+			DisplayAppName: r.Article.DisplayAppName,
+			IconSrc:        r.Article.IconSrc,
+			CvCondition:    r.Article.CvCondition,
+			BasePoint:      int(r.Article.BasePoint),
 		})
 	}
 	return articles, nil

@@ -1,3 +1,5 @@
+// Resolverの型定義を行うところ
+
 package graph
 
 import "github.com/k88t76/GraphQL-gRPC-demo/article/client"

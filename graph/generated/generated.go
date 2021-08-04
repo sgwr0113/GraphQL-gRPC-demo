@@ -44,10 +44,11 @@ type DirectiveRoot struct {
 
 type ComplexityRoot struct {
 	Article struct {
-		Author  func(childComplexity int) int
-		Content func(childComplexity int) int
-		ID      func(childComplexity int) int
-		Title   func(childComplexity int) int
+		BasePoint      func(childComplexity int) int
+		CvCondition    func(childComplexity int) int
+		DisplayAppName func(childComplexity int) int
+		ID             func(childComplexity int) int
+		IconSrc        func(childComplexity int) int
 	}
 
 	Mutation struct {
@@ -87,19 +88,26 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	_ = ec
 	switch typeName + "." + field {
 
-	case "Article.author":
-		if e.complexity.Article.Author == nil {
+	case "Article.base_point":
+		if e.complexity.Article.BasePoint == nil {
 			break
 		}
 
-		return e.complexity.Article.Author(childComplexity), true
+		return e.complexity.Article.BasePoint(childComplexity), true
 
-	case "Article.content":
-		if e.complexity.Article.Content == nil {
+	case "Article.cv_condition":
+		if e.complexity.Article.CvCondition == nil {
 			break
 		}
 
-		return e.complexity.Article.Content(childComplexity), true
+		return e.complexity.Article.CvCondition(childComplexity), true
+
+	case "Article.display_app_name":
+		if e.complexity.Article.DisplayAppName == nil {
+			break
+		}
+
+		return e.complexity.Article.DisplayAppName(childComplexity), true
 
 	case "Article.id":
 		if e.complexity.Article.ID == nil {
@@ -108,12 +116,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Article.ID(childComplexity), true
 
-	case "Article.title":
-		if e.complexity.Article.Title == nil {
+	case "Article.icon_src":
+		if e.complexity.Article.IconSrc == nil {
 			break
 		}
 
-		return e.complexity.Article.Title(childComplexity), true
+		return e.complexity.Article.IconSrc(childComplexity), true
 
 	case "Mutation.createArticle":
 		if e.complexity.Mutation.CreateArticle == nil {
@@ -234,35 +242,43 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 }
 
 var sources = []*ast.Source{
-	{Name: "graph/schema.graphqls", Input: `type Article {
+	{Name: "graph/schema.graphqls", Input: `# articleサービスとやり取りする広告の型定義
+type Article {
     id: Int!
-    author: String!
-    title: String!
-    content: String!
+    display_app_name: String!
+    icon_src: String!
+    cv_condition: String!
+    base_point: Int!
 }
 
-type Query {
-    article(input: Int!): Article!
-    articles: [Article!]!
-}
-
+# CREATEのためのinputを定義
 input CreateInput {
-    author: String!
-    title: String!
-    content: String!
+    display_app_name: String!
+    icon_src: String!
+    cv_condition: String!
+    base_point: Int!
 }
 
+# UPDATEのためのinputを定義
 input UpdateInput {
     id: Int!
-    author: String!
-    title: String!
-    content: String!
+    display_app_name: String!
+    icon_src: String!
+    cv_condition: String!
+    base_point: Int!
 }
 
+# mutationの定義(CREATE, UPDATE, DELETEを行う)
 type Mutation {
     createArticle(input: CreateInput!): Article!
     updateArticle(input: UpdateInput!): Article!
     deleteArticle(input: Int!): Int!
+}
+
+# queryの定義(article → READ, articles → 全取得)
+type Query {
+    article(input: Int!): Article!
+    articles: [Article!]!
 }`, BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
@@ -419,7 +435,7 @@ func (ec *executionContext) _Article_id(ctx context.Context, field graphql.Colle
 	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Article_author(ctx context.Context, field graphql.CollectedField, obj *model.Article) (ret graphql.Marshaler) {
+func (ec *executionContext) _Article_display_app_name(ctx context.Context, field graphql.CollectedField, obj *model.Article) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -437,7 +453,7 @@ func (ec *executionContext) _Article_author(ctx context.Context, field graphql.C
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Author, nil
+		return obj.DisplayAppName, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -454,7 +470,7 @@ func (ec *executionContext) _Article_author(ctx context.Context, field graphql.C
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Article_title(ctx context.Context, field graphql.CollectedField, obj *model.Article) (ret graphql.Marshaler) {
+func (ec *executionContext) _Article_icon_src(ctx context.Context, field graphql.CollectedField, obj *model.Article) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -472,7 +488,7 @@ func (ec *executionContext) _Article_title(ctx context.Context, field graphql.Co
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Title, nil
+		return obj.IconSrc, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -489,7 +505,7 @@ func (ec *executionContext) _Article_title(ctx context.Context, field graphql.Co
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Article_content(ctx context.Context, field graphql.CollectedField, obj *model.Article) (ret graphql.Marshaler) {
+func (ec *executionContext) _Article_cv_condition(ctx context.Context, field graphql.CollectedField, obj *model.Article) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -507,7 +523,7 @@ func (ec *executionContext) _Article_content(ctx context.Context, field graphql.
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Content, nil
+		return obj.CvCondition, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -522,6 +538,41 @@ func (ec *executionContext) _Article_content(ctx context.Context, field graphql.
 	res := resTmp.(string)
 	fc.Result = res
 	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Article_base_point(ctx context.Context, field graphql.CollectedField, obj *model.Article) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Article",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.BasePoint, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_createArticle(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -1891,27 +1942,35 @@ func (ec *executionContext) unmarshalInputCreateInput(ctx context.Context, obj i
 
 	for k, v := range asMap {
 		switch k {
-		case "author":
+		case "display_app_name":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("author"))
-			it.Author, err = ec.unmarshalNString2string(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("display_app_name"))
+			it.DisplayAppName, err = ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-		case "title":
+		case "icon_src":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("title"))
-			it.Title, err = ec.unmarshalNString2string(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("icon_src"))
+			it.IconSrc, err = ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-		case "content":
+		case "cv_condition":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("content"))
-			it.Content, err = ec.unmarshalNString2string(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("cv_condition"))
+			it.CvCondition, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "base_point":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("base_point"))
+			it.BasePoint, err = ec.unmarshalNInt2int(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -1935,27 +1994,35 @@ func (ec *executionContext) unmarshalInputUpdateInput(ctx context.Context, obj i
 			if err != nil {
 				return it, err
 			}
-		case "author":
+		case "display_app_name":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("author"))
-			it.Author, err = ec.unmarshalNString2string(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("display_app_name"))
+			it.DisplayAppName, err = ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-		case "title":
+		case "icon_src":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("title"))
-			it.Title, err = ec.unmarshalNString2string(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("icon_src"))
+			it.IconSrc, err = ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-		case "content":
+		case "cv_condition":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("content"))
-			it.Content, err = ec.unmarshalNString2string(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("cv_condition"))
+			it.CvCondition, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "base_point":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("base_point"))
+			it.BasePoint, err = ec.unmarshalNInt2int(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -1989,18 +2056,23 @@ func (ec *executionContext) _Article(ctx context.Context, sel ast.SelectionSet, 
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "author":
-			out.Values[i] = ec._Article_author(ctx, field, obj)
+		case "display_app_name":
+			out.Values[i] = ec._Article_display_app_name(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "title":
-			out.Values[i] = ec._Article_title(ctx, field, obj)
+		case "icon_src":
+			out.Values[i] = ec._Article_icon_src(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "content":
-			out.Values[i] = ec._Article_content(ctx, field, obj)
+		case "cv_condition":
+			out.Values[i] = ec._Article_cv_condition(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "base_point":
+			out.Values[i] = ec._Article_base_point(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
