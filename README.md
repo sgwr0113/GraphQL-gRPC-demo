@@ -1,3 +1,14 @@
+# 起動方法
+```
+$ go run article/server/server.go
+```
+
+別タブで
+
+```
+$ go run graph/server/server.go
+```
+
 GraphQLサーバーとgRPCサーバーを接続してみました。
 
 Zennにて詳細内容を説明しています。
